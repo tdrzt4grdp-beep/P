@@ -7,13 +7,13 @@ const THEME = {
   headFontFace: "Arial",
   bodyFontFace: "Calibri",
   colors: {
-    dk1: "1C1C1C", lt1: "FFFFFF", dk2: "3A3A3A", lt2: "F3EEE6",
+    dk1: "1C1C1C", lt1: "FFFFFF", dk2: "3A3A3A", lt2: "F2EFEA",
     accent1: "B8946A", accent2: "1C1C1C", accent3: "E6D9C4", accent4: "6B6B6B",
     accent5: "8C6A44", accent6: "D9C7A7", hlink: "8C6A44", folHlink: "6B6B6B",
   },
 };
 
-const IMG = path.join(__dirname, "olaplex.png");
+const F = (n) => path.join(__dirname, "foto", n + ".jpg");
 const AUTHOR = "Andrea Habáňová";
 
 (async () => {
@@ -24,98 +24,127 @@ const AUTHOR = "Andrea Habáňová";
   pres.theme = { headFontFace: THEME.headFontFace, bodyFontFace: THEME.bodyFontFace };
   const C = pres.SchemeColor;
 
+  const footer = (x, w) => ({ text: { text: `Olaplex No.4 · ${AUTHOR}`, options: {
+    x, y: 5.2, w, h: 0.25, fontSize: 10, color: C.accent4, margin: 0 } } });
+
+  // Fotka vpravo přes celou výšku, text vlevo
   pres.defineSlideMaster({
-    title: "Titulni",
-    background: { color: C.text1 },
+    title: "Fotka vpravo",
+    background: { color: C.background1 },
     objects: [
-      { placeholder: { options: { name: "title", type: "title", x: 0.6, y: 1.55, w: 5.4, h: 1.5,
-        fontSize: 36, bold: true, color: C.background1, valign: "top", align: "left", margin: 0 }, text: "" } },
+      { placeholder: { options: { name: "title", type: "title", x: 0.5, y: 0.4, w: 3.6, h: 0.9,
+        fontSize: 28, bold: true, color: C.text1, valign: "top", align: "left", margin: 0 }, text: "" } },
+      footer(0.5, 3.6),
     ],
   });
+  // Fotka vlevo, text vpravo
+  pres.defineSlideMaster({
+    title: "Fotka vlevo",
+    background: { color: C.background1 },
+    objects: [
+      { placeholder: { options: { name: "title", type: "title", x: 5.95, y: 0.4, w: 3.55, h: 0.9,
+        fontSize: 28, bold: true, color: C.text1, valign: "top", align: "left", margin: 0 }, text: "" } },
+      footer(5.95, 3.55),
+    ],
+  });
+  // Obsahový snímek bez fotky
   pres.defineSlideMaster({
     title: "Obsah",
     background: { color: C.background1 },
     objects: [
       { placeholder: { options: { name: "title", type: "title", x: 0.5, y: 0.35, w: 9, h: 0.7,
-        fontSize: 30, bold: true, color: C.text1, valign: "middle", align: "left", margin: 0 }, text: "" } },
-      { text: { text: `Produktový list · Olaplex No.4 · ${AUTHOR}`, options: {
-        x: 0.5, y: 5.2, w: 7, h: 0.3, fontSize: 10, color: C.accent4, margin: 0 } } },
+        fontSize: 28, bold: true, color: C.text1, valign: "middle", align: "left", margin: 0 }, text: "" } },
+      footer(0.5, 6),
     ],
-    slideNumber: { x: 9.0, y: 5.2, w: 0.5, h: 0.3, fontSize: 10, color: "6B6B6B", align: "right" },
   });
+
+  const label = (s, text, x, y, w) => s.addText(text, { x, y, w, h: 0.28, fontSize: 12, bold: true,
+    color: C.accent5, charSpacing: 2, margin: 0, isTextBox: true });
+  const photoR = (s, n, alt) => s.addImage({ path: F(n), x: 4.375, y: 0, w: 5.625, h: 5.625, altText: alt });
+  const photoL = (s, n, alt) => s.addImage({ path: F(n), x: 0, y: 0, w: 5.625, h: 5.625, altText: alt });
+  const numCircle = (s, n, x, y, d, fill, size) => {
+    s.addShape(pres.shapes.OVAL, { x, y, w: d, h: d, fill: { color: fill }, objectName: `Kruh ${n}` });
+    s.addText(String(n), { x, y, w: d, h: d, fontSize: size, bold: true, align: "center", valign: "middle",
+      color: C.background1, margin: 0, isTextBox: true });
+  };
 
   // 1 — Titulní snímek
   pres.addSection({ title: "Úvod" });
-  let s = pres.addSlide({ masterName: "Titulni", sectionTitle: "Úvod" });
-  s.addText("PRODUKTOVÝ LIST", { x: 0.6, y: 1.0, w: 5, h: 0.4, fontSize: 14, bold: true,
-    color: C.accent1, charSpacing: 4, margin: 0, isTextBox: true });
-  s.addText("Olaplex No.4 Bond Maintenance šampon", { placeholder: "title" });
-  s.addText("250 ml · šampon pro obnovu a posílení vlasů", { x: 0.6, y: 3.15, w: 5.4, h: 0.4,
-    fontSize: 16, color: C.accent6, margin: 0, isTextBox: true });
+  let s = pres.addSlide({ masterName: "Fotka vpravo", sectionTitle: "Úvod" });
+  photoR(s, "modelka", "Žena s dlouhými lesklými vlasy");
+  s.addText("PRODUKTOVÝ LIST", { x: 0.5, y: 1.1, w: 3.6, h: 0.3, fontSize: 13, bold: true,
+    color: C.accent5, charSpacing: 3, margin: 0, isTextBox: true });
+  s.addText("Olaplex No.4", { x: 0.5, y: 1.5, w: 3.7, h: 0.75, fontSize: 36,
+    bold: true, color: C.text1, fontFace: "Arial", valign: "top", margin: 0, isTextBox: true });
+  s.addText("Bond Maintenance šampon 250 ml", { x: 0.5, y: 2.3, w: 3.6, h: 0.8, fontSize: 18,
+    color: C.text2, valign: "top", margin: 0, isTextBox: true });
   s.addText([
-    { text: "Vypracovala: ", options: { color: C.accent6 } },
-    { text: AUTHOR, options: { bold: true, color: C.background1 } },
-  ], { x: 0.6, y: 4.5, w: 5.4, h: 0.4, fontSize: 16, margin: 0, isTextBox: true });
-  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 6.55, y: 0.5, w: 2.95, h: 4.625,
-    fill: { color: C.background1 }, rectRadius: 0.15, objectName: "Ramecek obrazku" });
-  s.addImage({ path: IMG, x: 6.92, y: 0.75, w: 2.21, h: 3.8, altText: "Šampon Olaplex No.4 Bond Maintenance 250 ml" });
+    { text: "Vypracovala: ", options: { color: C.accent4 } },
+    { text: AUTHOR, options: { bold: true, color: C.text1 } },
+  ], { x: 0.5, y: 4.3, w: 3.7, h: 0.35, fontSize: 15, margin: 0, isTextBox: true });
 
-  // 2 — Výrobce, typ výrobku + specifikace
-  pres.addSection({ title: "Produkt" });
-  s = pres.addSlide({ masterName: "Obsah", sectionTitle: "Produkt" });
-  s.addText("Výrobce a typ výrobku", { placeholder: "title" });
-  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 0.5, y: 1.3, w: 2.6, h: 3.7,
-    fill: { color: C.background2 }, rectRadius: 0.15, objectName: "Ramecek obrazku" });
-  s.addImage({ path: IMG, x: 0.74, y: 1.45, w: 2.12, h: 3.4, altText: "Šampon Olaplex No.4" });
-
-  const label = { fontSize: 13, bold: true, color: C.accent5, margin: 0, charSpacing: 1 };
-  s.addText("VÝROBCE", { x: 3.5, y: 1.3, w: 2, h: 0.3, ...label, isTextBox: true });
-  s.addText("OLAPLEX, Inc. (USA)", { x: 3.5, y: 1.6, w: 6, h: 0.4, fontSize: 18, bold: true,
-    color: C.text1, margin: 0, isTextBox: true });
-  s.addText("TYP VÝROBKU", { x: 3.5, y: 2.2, w: 2, h: 0.3, ...label, isTextBox: true });
-  s.addText("Šampon pro péči o vlasy – 250 ml", { x: 3.5, y: 2.5, w: 6, h: 0.4, fontSize: 18,
+  // 2 — Název, výrobce, typ + specifikace
+  pres.addSection({ title: "Výrobek" });
+  s = pres.addSlide({ masterName: "Obsah", sectionTitle: "Výrobek" });
+  s.addText("O výrobku", { placeholder: "title" });
+  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 0.5, y: 1.25, w: 2.6, h: 3.8,
+    fill: { color: "F2EFEA" }, rectRadius: 0.15, objectName: "Pozadi fotky" });
+  s.addImage({ path: F("lahev"), x: 0.75, y: 1.4, w: 2.1, h: 3.5, sizing: { type: "contain", w: 2.1, h: 3.5 },
+    altText: "Lahev šamponu Olaplex No.4, 250 ml" });
+  label(s, "NÁZEV VÝROBKU", 3.5, 1.25, 3);
+  s.addText("Olaplex No.4 Bond Maintenance Shampoo, 250 ml", { x: 3.5, y: 1.53, w: 6, h: 0.35,
+    fontSize: 16, bold: true, color: C.text1, margin: 0, isTextBox: true });
+  label(s, "VÝROBCE", 3.5, 2.05, 3);
+  s.addText("OLAPLEX, Inc. – Kalifornie, USA", { x: 3.5, y: 2.33, w: 6, h: 0.35, fontSize: 16,
     bold: true, color: C.text1, margin: 0, isTextBox: true });
+  label(s, "TYP VÝROBKU + SPECIFIKACE", 3.5, 2.85, 4);
   const spec = [
-    "pro všechny typy vlasů",
-    "obnovuje, posiluje a hydratuje vlasy",
-    "vhodný pro poškozené a barvené vlasy",
-    "bez SLS a SLES, šetrný pro každodenní mytí",
-    "patentovaná technologie obnovy vazeb ve vlasu",
+    "šampon pro obnovu a posílení vlasů",
+    "pro všechny typy vlasů, i barvené a poškozené",
+    "hydratuje a dodává vlasům lesk",
+    "šetrný – vhodný pro každodenní mytí",
+    "bez SLS a SLES",
   ];
   s.addText(spec.map((t, i) => ({ text: t, options: { bullet: { code: "2713" }, breakLine: i < spec.length - 1 } })),
-    { x: 3.5, y: 3.05, w: 6, h: 1.9, fontSize: 15, color: C.text2, paraSpaceAfter: 6,
-      valign: "top", margin: 0, isTextBox: true });
+    { x: 3.5, y: 3.18, w: 6, h: 1.85, fontSize: 15, color: C.text2, paraSpaceAfter: 5, valign: "top",
+      margin: 0, isTextBox: true });
 
-  // 3 — Použití + popis
-  s = pres.addSlide({ masterName: "Obsah", sectionTitle: "Produkt" });
-  s.addText("Použití a popis produktu", { placeholder: "title" });
+  // 3 — Použití
+  s = pres.addSlide({ masterName: "Fotka vpravo", sectionTitle: "Výrobek" });
+  s.addText("Použití", { placeholder: "title" });
+  photoR(s, "pena", "Lahev šamponu Olaplex No.4 obalená pěnou");
   const steps = [
-    ["1", "Naneste", "dostatečné množství šamponu na mokré vlasy."],
-    ["2", "Napěňte", "a jemně vmasírujte do vlasů i pokožky hlavy."],
-    ["3", "Opláchněte", "důkladně vodou, v případě potřeby opakujte."],
+    "Naneste dostatečné množství šamponu na mokré vlasy.",
+    "Napěňte a jemně vmasírujte do vlasů a pokožky hlavy.",
+    "Důkladně opláchněte vodou, případně postup opakujte.",
   ];
-  steps.forEach(([n, head, txt], i) => {
-    const x = 0.5 + i * 3.1;
-    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: 1.3, w: 2.8, h: 1.75,
-      fill: { color: C.background2 }, rectRadius: 0.12, objectName: `Krok ${n}` });
-    s.addShape(pres.shapes.OVAL, { x: x + 0.25, y: 1.5, w: 0.5, h: 0.5, fill: { color: C.text1 },
-      objectName: `Cislo ${n}` });
-    s.addText(n, { x: x + 0.25, y: 1.5, w: 0.5, h: 0.5, fontSize: 16, bold: true, align: "center",
-      valign: "middle", color: C.background1, margin: 0, isTextBox: true });
-    s.addText(head, { x: x + 0.9, y: 1.5, w: 1.75, h: 0.5, fontSize: 17, bold: true, valign: "middle",
-      color: C.text1, margin: 0, isTextBox: true });
-    s.addText(txt, { x: x + 0.25, y: 2.15, w: 2.35, h: 0.8, fontSize: 14, color: C.text2,
-      valign: "top", margin: 0, isTextBox: true });
+  steps.forEach((t, i) => {
+    const y = 1.25 + i * 0.95;
+    numCircle(s, i + 1, 0.5, y, 0.45, C.text1, 14);
+    s.addText(t, { x: 1.15, y: y - 0.05, w: 2.95, h: 0.8, fontSize: 14, color: C.text2, valign: "top",
+      margin: 0, isTextBox: true });
   });
-  s.addText("POPIS PRODUKTU", { x: 0.5, y: 3.3, w: 4, h: 0.3, ...label, isTextBox: true });
-  s.addText("Vysoce hydratační šampon, který obnovuje, posiluje a vyživuje vlasy. Zanechává je " +
-    "lesklé, hebké a snadno upravitelné, chrání je před lámáním a roztřepenými konečky. Je šetrný, " +
-    "a proto ho lze používat každý den. Nejlepších výsledků dosáhnete v kombinaci s kondicionérem " +
-    "Olaplex No.5. Pokud se šampon dostane do očí, důkladně je vypláchněte čistou vodou.",
-    { x: 0.5, y: 3.65, w: 9, h: 1.4, fontSize: 14, color: C.text2, valign: "top", margin: 0,
-      isTextBox: true });
+  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 0.5, y: 4.1, w: 3.6, h: 0.85,
+    fill: { color: "F2EFEA" }, rectRadius: 0.1, objectName: "Tip" });
+  s.addText([{ text: "Tip: ", options: { bold: true, color: C.accent5 } },
+    { text: "Když se šampon dostane do očí, vypláchněte je čistou vodou." }],
+    { x: 0.65, y: 4.15, w: 3.3, h: 0.75, fontSize: 12, color: C.text2, valign: "middle", margin: 0, isTextBox: true });
 
-  // 4 — Složení
+  // 4 — Popis a výsledky
+  s = pres.addSlide({ masterName: "Fotka vlevo", sectionTitle: "Výrobek" });
+  s.addText("Co šampon umí", { placeholder: "title" });
+  photoL(s, "pred_po", "Vlasy před a po použití šamponu Olaplex No.4");
+  s.addText("Hydratační šampon, který obnovuje a posiluje vlasy. Po umytí jsou vlasy lesklé, hebké " +
+    "a snadno se rozčesávají. Chrání je před lámáním a roztřepenými konečky.",
+    { x: 5.95, y: 1.3, w: 3.55, h: 1.75, fontSize: 14, color: C.text2, valign: "top", margin: 0, isTextBox: true });
+  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 5.95, y: 3.25, w: 3.55, h: 1.65,
+    fill: { color: "F2EFEA" }, rectRadius: 0.1, objectName: "Vysledek" });
+  s.addText("Před / po", { x: 6.15, y: 3.4, w: 3.2, h: 0.35, fontSize: 16, bold: true, color: C.text1,
+    margin: 0, isTextBox: true });
+  s.addText("Fotka ukazuje vlasy před umytím a po umytí šamponem No.4 a kondicionérem No.5.",
+    { x: 6.15, y: 3.8, w: 3.2, h: 0.95, fontSize: 13, color: C.text2, valign: "top", margin: 0, isTextBox: true });
+
+  // 5 — Složení
   pres.addSection({ title: "Složení" });
   s = pres.addSlide({ masterName: "Obsah", sectionTitle: "Složení" });
   s.addText("Složení výrobku", { placeholder: "title" });
@@ -136,17 +165,20 @@ const AUTHOR = "Andrea Habáňová";
     "Benzoate, Potassium Sorbate, Phenoxyethanol, Chlorphenesin, Ethylhexylglycerin, Quaternium-95, PEG-8, " +
     "PEG-8/SMDI Copolymer, Palmitoyl Myristyl Serinate, Citric Acid, Sodium Hyaluronate, Tocopherol, Biotin, " +
     "Helianthus Annuus (Sunflower) Seed Extract, Helianthus Annuus (Sunflower) Seed Oil.";
-  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 0.5, y: 1.25, w: 9, h: 3.8,
-    fill: { color: C.background2 }, rectRadius: 0.12, objectName: "Pozadi slozeni" });
-  s.addText(inci, { x: 0.75, y: 1.4, w: 8.5, h: 3.5, fontSize: 11.5, color: C.text2,
-    valign: "middle", margin: 0, isTextBox: true, lineSpacingMultiple: 1.05 });
+  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 0.5, y: 1.2, w: 6.3, h: 3.85,
+    fill: { color: "F2EFEA" }, rectRadius: 0.12, objectName: "Pozadi slozeni" });
+  s.addText(inci, { x: 0.65, y: 1.3, w: 6.0, h: 3.65, fontSize: 10, color: C.text2, valign: "middle",
+    margin: 0, isTextBox: true });
+  s.addImage({ path: F("textura"), x: 7.1, y: 1.2, w: 2.4, h: 2.4, rounding: false, altText: "Textura šamponu" });
+  s.addText("Textura šamponu – hustý krémový gel, který dobře pění.", { x: 7.1, y: 3.75, w: 2.4, h: 0.8,
+    fontSize: 12, italic: true, color: C.accent4, valign: "top", margin: 0, isTextBox: true });
 
-  // 5 — Hlavní účinné látky
+  // 6 — Hlavní účinné látky
   s = pres.addSlide({ masterName: "Obsah", sectionTitle: "Složení" });
   s.addText("Hlavní účinné látky a jejich význam", { placeholder: "title" });
   const actives = [
-    ["Bis-Aminopropyl Diglycol Dimaleate", "patentovaná technologie Olaplex – obnovuje porušené vazby ve vlasu a posiluje ho"],
-    ["Sodium Lauroyl Methyl Isethionate, Cocamidopropyl Hydroxysultaine", "jemné tenzidy z kokosu – šetrně myjí vlasy i pokožku"],
+    ["Bis-Aminopropyl Diglycol Dimaleate", "patentovaná látka Olaplex – spojuje porušené vazby ve vlasu a posiluje ho"],
+    ["Sodium Lauroyl Methyl Isethionate, Cocamidopropyl Hydroxysultaine", "jemné mycí látky (tenzidy) z kokosu – šetrně myjí"],
     ["Panthenol, Biotin, Sodium Hyaluronate", "hydratace, pružnost a lesk vlasů"],
     ["Apricot Kernel Oil, Argania Spinosa Ferment", "rostlinné oleje – vyživují a zjemňují vlasy"],
     ["Polyquaternium-10, Guar Hydroxypropyltrimonium Chloride", "kondicionační látky – snadné rozčesávání, antistatický účinek"],
@@ -154,39 +186,60 @@ const AUTHOR = "Andrea Habáňová";
   ];
   actives.forEach(([name, desc], i) => {
     const col = i % 3, row = Math.floor(i / 3);
-    const x = 0.5 + col * 3.05, y = 1.25 + row * 1.95;
-    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w: 2.85, h: 1.75,
-      fill: { color: C.background2 }, rectRadius: 0.12, objectName: `Latka ${i + 1}` });
-    s.addShape(pres.shapes.OVAL, { x: x + 0.2, y: y + 0.2, w: 0.4, h: 0.4, fill: { color: C.text1 },
-      objectName: `Cislo latky ${i + 1}` });
-    s.addText(String(i + 1), { x: x + 0.2, y: y + 0.2, w: 0.4, h: 0.4, fontSize: 13, bold: true,
-      align: "center", valign: "middle", color: C.background1, margin: 0, isTextBox: true });
+    const x = 0.5 + col * 3.05, y = 1.2 + row * 1.95;
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w: 2.85, h: 1.8,
+      fill: { color: "F2EFEA" }, rectRadius: 0.12, objectName: `Latka ${i + 1}` });
+    numCircle(s, i + 1, x + 0.2, y + 0.2, 0.4, C.text1, 13);
     s.addText(name, { x: x + 0.75, y: y + 0.12, w: 1.95, h: 0.6, fontSize: 11, bold: true,
       color: C.accent5, valign: "middle", margin: 0, isTextBox: true });
-    s.addText(desc, { x: x + 0.2, y: y + 0.8, w: 2.5, h: 0.85, fontSize: 12, color: C.text1,
+    s.addText(desc, { x: x + 0.2, y: y + 0.8, w: 2.5, h: 0.9, fontSize: 12, color: C.text1,
       valign: "top", margin: 0, isTextBox: true });
   });
 
-  // 6 — Zdroj informací
-  pres.addSection({ title: "Zdroje" });
-  s = pres.addSlide({ masterName: "Obsah", sectionTitle: "Zdroje" });
+  // 7 — Doporučená péče
+  s = pres.addSlide({ masterName: "Fotka vlevo", sectionTitle: "Složení" });
+  s.addText("Doporučená péče", { placeholder: "title" });
+  photoL(s, "rutina", "Produkty Olaplex No.3, No.4 a No.5");
+  const routine = [
+    ["No.3", "kúra před mytím – opravuje a zjemňuje vlasy"],
+    ["No.4", "šampon – umyje, posílí a hydratuje"],
+    ["No.5", "kondicionér – vyživí a dodá lesk"],
+  ];
+  routine.forEach(([n, t], i) => {
+    const y = 1.35 + i * 1.05;
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 5.95, y, w: 0.85, h: 0.75, fill: { color: i === 1 ? C.text1 : C.accent1 },
+      rectRadius: 0.1, objectName: `Produkt ${n}` });
+    s.addText(n, { x: 5.95, y, w: 0.85, h: 0.75, fontSize: 14, bold: true, align: "center", valign: "middle",
+      color: C.background1, margin: 0, isTextBox: true });
+    s.addText(t, { x: 6.95, y, w: 2.55, h: 0.75, fontSize: 13, color: C.text2, valign: "middle", margin: 0, isTextBox: true });
+  });
+  s.addText("Šampon No.4 funguje nejlépe společně s kondicionérem No.5.", { x: 5.95, y: 4.5, w: 3.55, h: 0.5,
+    fontSize: 12, italic: true, color: C.accent4, valign: "top", margin: 0, isTextBox: true });
+
+  // 8 — Zdroje
+  pres.addSection({ title: "Závěr" });
+  s = pres.addSlide({ masterName: "Obsah", sectionTitle: "Závěr" });
   s.addText("Zdroj informací", { placeholder: "title" });
   const src = [
     ["Heureka.cz – Olaplex No.4 Bond Maintenance šampon 250 ml", "https://sampony.heureka.cz"],
     ["OLAPLEX – oficiální stránky výrobce", "https://olaplex.com"],
     ["OLAPLEX – seznam složení (INCI)", "https://cdn.shopify.com/s/files/1/1081/3948/files/OLAPLEX_inci.pdf"],
-    ["Obal výrobku – Olaplex No.4 Bond Maintenance Shampoo", null],
+    ["Lookfantastic – fotografie výrobku", "https://www.lookfantastic.com/p/olaplex-no.4-strengthening-shampoo-250ml/17924637/"],
+    ["Obal výrobku", null],
   ];
   src.forEach(([t, url], i) => {
-    const y = 1.35 + i * 0.9;
-    s.addShape(pres.shapes.OVAL, { x: 0.5, y: y + 0.05, w: 0.45, h: 0.45, fill: { color: C.accent1 },
-      objectName: `Zdroj ${i + 1}` });
-    s.addText(String(i + 1), { x: 0.5, y: y + 0.05, w: 0.45, h: 0.45, fontSize: 14, bold: true,
-      align: "center", valign: "middle", color: C.background1, margin: 0, isTextBox: true });
+    const y = 1.25 + i * 0.72;
+    numCircle(s, i + 1, 0.5, y + 0.05, 0.4, C.accent1, 13);
     const runs = [{ text: t, options: { bold: true, color: C.text1, breakLine: !!url } }];
-    if (url) runs.push({ text: url, options: { color: C.accent5, fontSize: 12, hyperlink: { url } } });
-    s.addText(runs, { x: 1.2, y, w: 8.3, h: 0.6, fontSize: 15, valign: "middle", margin: 0, isTextBox: true });
+    if (url) runs.push({ text: url, options: { color: C.accent5, fontSize: 11, hyperlink: { url } } });
+    s.addText(runs, { x: 1.1, y, w: 6.1, h: 0.55, fontSize: 14, valign: "middle", margin: 0, isTextBox: true });
   });
+  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 7.4, y: 1.25, w: 2.1, h: 3.4, fill: { color: C.text1 },
+    rectRadius: 0.15, objectName: "Podekovani" });
+  s.addText("Děkuji za pozornost", { x: 7.55, y: 1.45, w: 1.8, h: 1.9, fontSize: 22, bold: true, fontFace: "Arial",
+    color: C.background1, valign: "top", margin: 0, isTextBox: true });
+  s.addText(AUTHOR, { x: 7.55, y: 3.9, w: 1.8, h: 0.5, fontSize: 13, color: C.accent6, valign: "bottom",
+    margin: 0, isTextBox: true });
 
   const out = path.join(__dirname, "Produktovy_list_Olaplex_No4.pptx");
   await pres.writeFile({ fileName: out });
