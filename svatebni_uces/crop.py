@@ -9,13 +9,13 @@ specs = {  # nazev: (sirka, vyska v palcich, fokus x, fokus y)
   "vlasy":        (4.0, 3.7, 0.45, 0.5),
   "navrh_zezadu": (2.6, 3.3, 0.5, 0.5),
   "navrh_zboku":  (2.6, 3.3, 0.45, 0.5),
-  "kulma":        (2.4, 1.75, 0.6, 0.5),
-  "vlasenky":     (2.4, 1.75, 0.5, 0.5),
+  "kulma":        (2.2, 1.5, 0.6, 0.5),
+  "vlasenky":     (2.2, 1.5, 0.5, 0.5),
   "cop":          (2.6, 3.7, 0.5, 0.5),
   "spona":        (2.85, 1.55, 0.5, 0.5),
   "kvetiny":      (2.85, 1.55, 0.45, 0.4),
   "zavoj":        (2.85, 1.55, 0.6, 0.35),
-  "vysledek":     (3.3, 3.53, 0.5, 0.5),
+  "vysledek":     (2.95, 3.35, 0.5, 0.5),
   "dekuji":       (4.5, 5.625, 0.45, 0.5),
 }
 src = {"vysledek": "navrh_zezadu", "dekuji": "navrh_zboku"}
