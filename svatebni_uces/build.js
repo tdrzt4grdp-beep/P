@@ -16,7 +16,10 @@ const COL = {
   wine: "6E2F40", rose: "A8576A", petal: "EBCFD6", blush: "F8EEF0", ink: "33262B",
   muted: "75666B", white: "FFFFFF", gold: "C9A66B",
 };
-const HEAD = "Cambria", BODY = "Calibri";
+const HEAD = "Georgia", BODY = "Arial"; // písma, která má Windows, Mac i iPhone
+// Režim sestavení: "visual" = jen grafika (z ní se udělá obrázek pozadí), "final" = obrázek pozadí + text
+const MODE = process.argv[2] || "final";
+const BG = (n) => path.join(__dirname, "pozadi", `slide-${n}.png`);
 const P = (n) => path.join(__dirname, "foto", "orez", n + ".jpg");
 
 const meta = JSON.parse(fs.readFileSync(path.join(__dirname, "foto", "zdroje_fotek.json"), "utf8"));
@@ -47,16 +50,29 @@ async function icon(Comp, color = "#FFFFFF") {
   pres.theme = { headFontFace: HEAD, bodyFontFace: BODY };
 
   pres.defineSlideMaster({ title: "Tmavy", background: { color: COL.wine }, objects: [] });
+  let slideNo = 0;
+  const newSlide = (opts) => {
+    const sl = pres.addSlide(opts); slideNo += 1;
+    if (MODE === "visual") { sl.addText = () => sl; sl.addNotes = () => sl; }
+    else {
+      sl.addImage({ path: BG(slideNo), x: 0, y: 0, w: 10, h: 5.625, altText: "Pozadí snímku" });
+      sl.addShape = () => sl; sl.addImage = () => sl;
+      if (opts.masterName === "Obsah") {
+        sl.addText(`${AUTHOR} · ${CLASS} · Kadeřnická technologie – Slavnostní účesy`, { x: 0.5, y: 5.27, w: 7, h: 0.22,
+          fontSize: 9, color: COL.muted, fontFace: BODY, margin: 0, isTextBox: true });
+        sl.addText(String(slideNo), { x: 9.0, y: 5.27, w: 0.5, h: 0.22, fontSize: 9, color: COL.muted,
+          fontFace: BODY, align: "right", margin: 0, isTextBox: true });
+      }
+    }
+    return sl;
+  };
   pres.defineSlideMaster({
     title: "Obsah",
     background: { color: COL.blush },
     objects: [
       { placeholder: { options: { name: "title", type: "title", x: 1.2, y: 0.42, w: 8.3, h: 0.55,
         fontSize: 28, bold: true, fontFace: HEAD, color: COL.wine, valign: "middle", align: "left", margin: 0 }, text: "" } },
-      { text: { text: `${AUTHOR} · ${CLASS} · Kadeřnická technologie – Slavnostní účesy`, options: {
-        x: 0.5, y: 5.27, w: 7, h: 0.22, fontSize: 9, color: COL.muted, fontFace: BODY, margin: 0 } } },
     ],
-    slideNumber: { x: 9.0, y: 5.27, w: 0.5, h: 0.22, fontSize: 9, color: COL.muted, fontFace: BODY, align: "right" },
   });
 
   const shadow = () => ({ type: "outer", color: "6E2F40", blur: 8, offset: 2, angle: 90, opacity: 0.15 });
@@ -96,9 +112,9 @@ async function icon(Comp, color = "#FFFFFF") {
 
   // 1 ─ TITULNÍ SNÍMEK
   pres.addSection({ title: "Úvod" });
-  let s = pres.addSlide({ masterName: "Tmavy", sectionTitle: "Úvod" });
+  let s = newSlide({ masterName: "Tmavy", sectionTitle: "Úvod" });
   s.addImage({ data: ic.ring, x: 0.6, y: 0.65, w: 0.42, h: 0.42, altText: "" });
-  txt(s, "SAMOSTATNÁ PRÁCE · KADEŘNICKÁ TECHNOLOGIE", { x: 1.15, y: 0.72, w: 4.5, h: 0.3, fontSize: 11, bold: true,
+  txt(s, "SAMOSTATNÁ PRÁCE · SLAVNOSTNÍ ÚČESY", { x: 1.15, y: 0.74, w: 4.6, h: 0.3, fontSize: 10, bold: true,
     color: COL.petal, charSpacing: 2 });
   txt(s, "Svatební účes", { x: 0.6, y: 1.35, w: 4.8, h: 0.9, fontSize: 44, bold: true, fontFace: HEAD, color: COL.white });
   txt(s, "Romantický nízký drdol s copánkem a květinovou sponou", { x: 0.6, y: 2.3, w: 4.4, h: 0.85, fontSize: 18,
@@ -117,7 +133,7 @@ async function icon(Comp, color = "#FFFFFF") {
 
   // 2 ─ PŘÍLEŽITOST A ZÁKAZNICE
   pres.addSection({ title: "Zákaznice a vlasy" });
-  s = pres.addSlide({ masterName: "Obsah", sectionTitle: "Zákaznice a vlasy" });
+  s = newSlide({ masterName: "Obsah", sectionTitle: "Zákaznice a vlasy" });
   header(s, ic.dress, "01 · PŘÍLEŽITOST", "Příležitost a zákaznice");
   card(s, 0.5, 1.25, 4.75, 3.8, "Zakaznice");
   txt(s, "Nevěsta Kristýna, 27 let", { x: 0.75, y: 1.42, w: 4.3, h: 0.4, fontSize: 18, bold: true, fontFace: HEAD, color: COL.wine });
@@ -133,7 +149,7 @@ async function icon(Comp, color = "#FFFFFF") {
     "na zádech, proto chce vlasy vyčesané – aby byla vidět záda i krk.");
 
   // 3 ─ CHARAKTERISTIKA VLASŮ
-  s = pres.addSlide({ masterName: "Obsah", sectionTitle: "Zákaznice a vlasy" });
+  s = newSlide({ masterName: "Obsah", sectionTitle: "Zákaznice a vlasy" });
   header(s, ic.hair, "02 · VLASY", "Charakteristika vlasů");
   framed(s, "vlasy", 0.6, 1.3, 3.6, 3.35, "Dlouhé husté vlnité vlasy zezadu");
   const tiles = [["DÉLKA", "dlouhé", "pod lopatky"], ["HUSTOTA", "husté", "hodně vlasů"],
@@ -155,7 +171,7 @@ async function icon(Comp, color = "#FFFFFF") {
 
   // 4 ─ NÁVRH ÚČESU
   pres.addSection({ title: "Návrh a postup" });
-  s = pres.addSlide({ masterName: "Obsah", sectionTitle: "Návrh a postup" });
+  s = newSlide({ masterName: "Obsah", sectionTitle: "Návrh a postup" });
   header(s, ic.spark, "03 · MŮJ NÁVRH", "Návrh účesu");
   framed(s, "navrh_zezadu", 0.6, 1.3, 2.45, 3.1, "Nízký drdol s bílými květinovými vlásenkami – zezadu");
   framed(s, "navrh_zboku", 3.35, 1.3, 2.45, 3.1, "Nízký drdol s copánkem a květinovou sponou – z boku");
@@ -177,7 +193,7 @@ async function icon(Comp, color = "#FFFFFF") {
     "a v něm květinová spona.");
 
   // 5 ─ PŘÍPRAVA, POMŮCKY A PŘÍPRAVKY
-  s = pres.addSlide({ masterName: "Obsah", sectionTitle: "Návrh a postup" });
+  s = newSlide({ masterName: "Obsah", sectionTitle: "Návrh a postup" });
   header(s, ic.comb, "04 · PŘÍPRAVA", "Příprava, pomůcky a přípravky");
   framed(s, "kulma", 0.6, 1.3, 2.2, 1.5, "Kadeřnice natáčí vlasy kulmou");
   framed(s, "vlasenky", 0.6, 3.3, 2.2, 1.5, "Vlásenky");
@@ -202,7 +218,7 @@ async function icon(Comp, color = "#FFFFFF") {
     "texturizační sprej a lak.");
 
   // 6 ─ PRACOVNÍ POSTUP
-  s = pres.addSlide({ masterName: "Obsah", sectionTitle: "Návrh a postup" });
+  s = newSlide({ masterName: "Obsah", sectionTitle: "Návrh a postup" });
   header(s, ic.list, "05 · POSTUP", "Pracovní postup");
   framed(s, "cop", 0.6, 1.3, 2.35, 3.35, "Zapletený copánek ve vlasech");
   card(s, 3.3, 1.25, 6.2, 3.8, "Kroky");
@@ -225,11 +241,11 @@ async function icon(Comp, color = "#FFFFFF") {
 
   // 7 ─ DOPLŇKY
   pres.addSection({ title: "Doplňky a závěr" });
-  s = pres.addSlide({ masterName: "Obsah", sectionTitle: "Doplňky a závěr" });
+  s = newSlide({ masterName: "Obsah", sectionTitle: "Doplňky a závěr" });
   header(s, ic.flower, "06 · DOPLŇKY", "Doplňky a jejich výběr");
   const acc = [
     ["spona", "Květinová spona", ["krémové květy ladí se šaty", "jemná a lehká, netlačí", "připnu ji nad drdol vpravo"], "Květinová spona do vlasů"],
-    ["kvetiny", "Vlásenky s perličkami", ["zdobí drdol na více místech", "perličky jako knoflíčky šatů", "zapíchnu je mezi smyčky drdolu"], "Bílé květinové vlásenky"],
+    ["kvetiny", "Perličkové vlásenky", ["zdobí drdol na více místech", "perličky jako knoflíčky šatů", "zapíchnu je mezi smyčky drdolu"], "Bílé květinové vlásenky"],
     ["zavoj", "Dlouhý závoj", ["připnu hřebínkem pod drdol", "nezakryje účes, na večer sundám", "jemný tyl bez výšivky – nepřebije účes"], "Nevěsta se závojem"],
   ];
   acc.forEach(([img, t, pts, alt], i) => {
@@ -244,7 +260,7 @@ async function icon(Comp, color = "#FFFFFF") {
     "na zádech šatů. Závoj připnu pod drdol, takže účes zůstane vidět.");
 
   // 8 ─ ZÁVĚREČNÉ ZHODNOCENÍ
-  s = pres.addSlide({ masterName: "Obsah", sectionTitle: "Doplňky a závěr" });
+  s = newSlide({ masterName: "Obsah", sectionTitle: "Doplňky a závěr" });
   header(s, ic.check, "07 · ZÁVĚR", "Závěrečné zhodnocení");
   card(s, 0.5, 1.25, 5.6, 1.45, "Proc je vhodny", COL.petal);
   txt(s, "Proč je návrh vhodný", { x: 0.7, y: 1.35, w: 5.2, h: 0.3, fontSize: 14, bold: true, color: COL.wine });
@@ -266,7 +282,7 @@ async function icon(Comp, color = "#FFFFFF") {
     "uděláme zkoušku účesu a svědkyni dám vlásenky a lak na opravy.");
 
   // 9 ─ DĚKUJI ZA POZORNOST
-  s = pres.addSlide({ masterName: "Tmavy", sectionTitle: "Doplňky a závěr" });
+  s = newSlide({ masterName: "Tmavy", sectionTitle: "Doplňky a závěr" });
   s.addImage({ data: ic.ring, x: 0.6, y: 1.0, w: 0.45, h: 0.45, altText: "" });
   txt(s, "Děkuji za pozornost", { x: 0.6, y: 1.65, w: 5, h: 1.5, fontSize: 44, bold: true, fontFace: HEAD, color: COL.white });
   txt(s, "Máte nějaké otázky?", { x: 0.6, y: 3.2, w: 4.6, h: 0.45, fontSize: 18, italic: true, color: COL.petal });
@@ -276,7 +292,8 @@ async function icon(Comp, color = "#FFFFFF") {
     { border: 0.1, rotate: 3, src: "navrh_zboku", creditColor: COL.petal });
   s.addNotes("Děkuji za pozornost. Ráda odpovím na vaše otázky.");
 
-  const out = path.join(__dirname, "Svatebni_uces_Habanova.pptx");
+  const out = MODE === "visual" ? path.join(__dirname, "pozadi", "graficka_vrstva.pptx")
+    : path.join(__dirname, "Svatebni_uces_Habanova.pptx");
   await pres.writeFile({ fileName: out });
   console.log("ok", out);
 })();
