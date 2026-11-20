@@ -89,7 +89,7 @@ const credit = (n) => {
     italic: true, color: C.text2, valign: "top", margin: 0, isTextBox: true });
   s.addText([
     { text: "Jméno: ", options: { color: C.accent4 } }, { text: AUTHOR, options: { bold: true, breakLine: true } },
-    { text: "Třída: ", options: { color: C.accent4 } }, { text: "………………", options: { bold: true } },
+    { text: "Třída: ", options: { color: C.accent4 } }, { text: "3.K", options: { bold: true } },
   ], { x: 0.6, y: 4.1, w: 4.6, h: 0.75, fontSize: 15, color: C.text1, valign: "top", margin: 0, isTextBox: true });
   s.addText(credit("kytice"), { x: 5.55, y: 5.38, w: 4.4, h: 0.2, fontSize: 8, color: C.text2,
     margin: 0, isTextBox: true });
@@ -256,11 +256,24 @@ const credit = (n) => {
       isTextBox: true });
   });
   photo(s, "vysledek", 6.2, 1.15, 3.3, 3.53, "Hotový nízký drdol s květinovými vlásenkami", "navrh_zezadu");
-  s.addText("Děkuji za pozornost", { x: 6.2, y: 4.85, w: 3.3, h: 0.35, fontSize: 16, bold: true, italic: true,
-    fontFace: "Cambria", color: C.accent5, align: "center", margin: 0, isTextBox: true });
   s.addNotes("Účes je vhodný, protože je romantický, ladí se šaty a ukáže záda. Aby držel celý den, " +
     "dělám pevný základ z culíku a vlásenky dávám křížem. Je pohodlný, nic netahá. Před svatbou " +
     "uděláme zkoušku účesu a svědkyni dám vlásenky a lak na opravy.");
+
+  // 9 — DĚKUJI ZA POZORNOST
+  s = pres.addSlide({ masterName: "Titulni", sectionTitle: "Doplňky a závěr" });
+  s.addImage({ path: P("dekuji"), x: 5.5, y: 0, w: 4.5, h: 5.625, altText: "Nízký drdol s květinovou sponou z boku" });
+  s.addText("Děkuji za pozornost", { x: 0.6, y: 1.6, w: 4.6, h: 1.5, fontSize: 40, bold: true,
+    fontFace: "Cambria", color: C.accent5, valign: "top", margin: 0, isTextBox: true });
+  s.addText("Máte nějaké otázky?", { x: 0.6, y: 3.15, w: 4.6, h: 0.45, fontSize: 18, italic: true,
+    color: C.text2, margin: 0, isTextBox: true });
+  s.addText([
+    { text: AUTHOR, options: { bold: true, breakLine: true } },
+    { text: "Třída 3.K", options: { color: C.accent4 } },
+  ], { x: 0.6, y: 4.2, w: 4.6, h: 0.7, fontSize: 15, color: C.text1, valign: "top", margin: 0, isTextBox: true });
+  s.addText(credit("navrh_zboku"), { x: 5.55, y: 5.38, w: 4.4, h: 0.2, fontSize: 8, color: C.text2,
+    margin: 0, isTextBox: true });
+  s.addNotes("Děkuji za pozornost. Ráda odpovím na vaše otázky.");
 
   const out = path.join(__dirname, "Svatebni_uces_Habanova.pptx");
   await pres.writeFile({ fileName: out });

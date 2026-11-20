@@ -16,8 +16,9 @@ specs = {  # nazev: (sirka, vyska v palcich, fokus x, fokus y)
   "kvetiny":      (2.85, 1.55, 0.45, 0.4),
   "zavoj":        (2.85, 1.55, 0.6, 0.35),
   "vysledek":     (3.3, 3.53, 0.5, 0.5),
+  "dekuji":       (4.5, 5.625, 0.45, 0.5),
 }
-src = {"vysledek": "navrh_zezadu"}
+src = {"vysledek": "navrh_zezadu", "dekuji": "navrh_zboku"}
 os.makedirs(f"{D}/foto/orez", exist_ok=True)
 for n, (w, h, fx, fy) in specs.items():
     im = Image.open(f"{D}/foto/{src.get(n, n)}.jpg").convert("RGB")
