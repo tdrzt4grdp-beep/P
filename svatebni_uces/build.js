@@ -46,7 +46,7 @@ async function icon(Comp, color = "#FFFFFF") {
   const pres = new pptxgen();
   pres.layout = "LAYOUT_16x9"; // 10 x 5.625 in
   pres.author = AUTHOR;
-  pres.title = "Svatební účes – romantický nízký drdol";
+  pres.title = "Svatební účesy";
   pres.theme = { headFontFace: HEAD, bodyFontFace: BODY };
 
   pres.defineSlideMaster({ title: "Tmavy", background: { color: COL.wine }, objects: [] });
@@ -116,8 +116,8 @@ async function icon(Comp, color = "#FFFFFF") {
   s.addImage({ data: ic.ring, x: 0.6, y: 0.65, w: 0.42, h: 0.42, altText: "" });
   txt(s, "SAMOSTATNÁ PRÁCE · SLAVNOSTNÍ ÚČESY", { x: 1.15, y: 0.74, w: 4.6, h: 0.3, fontSize: 10, bold: true,
     color: COL.petal, charSpacing: 2 });
-  txt(s, "Svatební účes", { x: 0.6, y: 1.35, w: 4.8, h: 0.9, fontSize: 44, bold: true, fontFace: HEAD, color: COL.white });
-  txt(s, "Romantický nízký drdol s copánkem a květinovou sponou", { x: 0.6, y: 2.3, w: 4.4, h: 0.85, fontSize: 18,
+  txt(s, "Svatební účesy", { x: 0.6, y: 1.35, w: 4.9, h: 0.9, fontSize: 42, bold: true, fontFace: HEAD, color: COL.white });
+  txt(s, "Můj návrh: romantický nízký drdol s copánkem a květinovou sponou", { x: 0.6, y: 2.3, w: 4.4, h: 0.85, fontSize: 18,
     italic: true, color: COL.petal });
   s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 0.6, y: 3.85, w: 3.3, h: 0.95, fill: { color: "843B4F" },
     line: { color: "843B4F", width: 0 }, rectRadius: 0.1, objectName: "Jmeno" });
@@ -128,46 +128,56 @@ async function icon(Comp, color = "#FFFFFF") {
   framed(s, "navrh_zezadu", 5.35, 2.55, 1.75, 2.22, "Nízký drdol s květinovými vlásenkami", { border: 0.08, rotate: -5, noCredit: true });
   txt(s, `${credit("kytice")} · ${credit("navrh_zezadu")}`, { x: 5.3, y: 5.3, w: 4.4, h: 0.18, fontSize: 8,
     color: COL.petal, align: "right" });
-  s.addNotes("Dobrý den, jmenuji se Andrea Habáňová ze třídy 3.K. Vystupuji jako kadeřnice a představím vám " +
-    "svůj návrh svatebního účesu – romantický nízký drdol s copánkem a květinovou sponou.");
+  s.addNotes("Dobrý den, jmenuji se Andrea Habáňová ze třídy 3.K. Moje prezentace je o svatebních účesech. " +
+    "Vystupuji jako kadeřnice a jako ukázku představím svůj návrh – romantický nízký drdol s copánkem.");
 
-  // 2 ─ PŘÍLEŽITOST A ZÁKAZNICE
-  pres.addSection({ title: "Zákaznice a vlasy" });
-  s = newSlide({ masterName: "Obsah", sectionTitle: "Zákaznice a vlasy" });
-  header(s, ic.dress, "01 · PŘÍLEŽITOST", "Příležitost a zákaznice");
-  card(s, 0.5, 1.25, 4.75, 3.8, "Zakaznice");
-  txt(s, "Nevěsta Kristýna, 27 let", { x: 0.75, y: 1.42, w: 4.3, h: 0.4, fontSize: 18, bold: true, fontFace: HEAD, color: COL.wine });
+  // 2 ─ PŘÍLEŽITOST A NEVĚSTA
+  pres.addSection({ title: "Svatba a vlasy" });
+  s = newSlide({ masterName: "Obsah", sectionTitle: "Svatba a vlasy" });
+  header(s, ic.dress, "01 · PŘÍLEŽITOST", "Příležitost a nevěsta");
+  card(s, 0.5, 1.25, 4.75, 3.8, "Svatba");
+  txt(s, "Svatba – nejdůležitější den nevěsty", { x: 0.72, y: 1.38, w: 4.35, h: 0.38, fontSize: 15, bold: true, fontFace: HEAD, color: COL.wine });
   txt(s, labelRows([
-    ["Kam jde", "letní svatba na zámku, obřad venku v zahradě, hostina a tanec do noci"],
-    ["Styl", "romantický, jemný a přirozený"],
-    ["Šaty", "bílé saténové, krajka, knoflíčky na zádech, dlouhý závoj"],
-    ["Chce", "elegantní účes, odhalený krk a záda, jemné květiny, vydrží celý den"],
-  ]), { x: 0.75, y: 2.0, w: 4.3, h: 2.95, fontSize: 14, paraSpaceAfter: 12 });
+    ["Program", "obřad, focení, hostina a tanec – účes musí vydržet i 12 hodin"],
+    ["Styl nevěsty", "nejčastěji romantický a elegantní"],
+    ["Oděv", "bílé nebo krémové šaty, často se závojem"],
+    ["Vzhled", "upravený a slavnostní účes, který ladí se šaty i závojem"],
+  ]), { x: 0.72, y: 1.85, w: 4.35, h: 2.1, fontSize: 12, paraSpaceAfter: 6 });
+  txt(s, "NEJČASTĚJŠÍ SVATEBNÍ ÚČESY", { x: 0.72, y: 4.0, w: 4.3, h: 0.22, fontSize: 9, bold: true, color: COL.rose, charSpacing: 2 });
+  [["drdol", 0.72, 0.85], ["polovyčesaný", 1.67, 1.2], ["rozpuštěné vlny", 2.97, 1.35], ["copy", 4.42, 0.65]].forEach(([t, x, w]) => {
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: 4.32, w, h: 0.4, fill: { color: COL.petal },
+      line: { color: COL.petal, width: 0 }, rectRadius: 0.2, objectName: "Typ " + t });
+    txt(s, t, { x, y: 4.32, w, h: 0.4, fontSize: 11, bold: true, color: COL.wine, align: "center", valign: "middle" });
+  });
   framed(s, "saty", 5.65, 1.3, 1.75, 3.25, "Záda svatebních šatů s knoflíčky");
   framed(s, "titul", 7.7, 1.3, 1.75, 3.25, "Nevěsta s vyčesanými vlasy a kyticí");
-  s.addNotes("Zákaznice je nevěsta Kristýna. Má letní svatbu na zámku. Šaty jsou bílé saténové s knoflíčky " +
-    "na zádech, proto chce vlasy vyčesané – aby byla vidět záda i krk.");
+  s.addNotes("Svatba je celodenní akce – obřad, focení, hostina a tanec. Proto musí svatební účes vydržet " +
+    "dlouho a pořád vypadat upraveně. Nevěsty chtějí většinou romantický a elegantní vzhled, který ladí " +
+    "s bílými šaty a závojem. Nejčastější svatební účesy jsou drdoly, polovyčesané účesy, rozpuštěné vlny a copy.");
 
   // 3 ─ CHARAKTERISTIKA VLASŮ
-  s = newSlide({ masterName: "Obsah", sectionTitle: "Zákaznice a vlasy" });
+  s = newSlide({ masterName: "Obsah", sectionTitle: "Svatba a vlasy" });
   header(s, ic.hair, "02 · VLASY", "Charakteristika vlasů");
   framed(s, "vlasy", 0.6, 1.3, 3.6, 3.35, "Dlouhé husté vlnité vlasy zezadu");
-  const tiles = [["DÉLKA", "dlouhé", "pod lopatky"], ["HUSTOTA", "husté", "hodně vlasů"],
-    ["SÍLA", "střední", "středně silný vlas"], ["STRUKTURA", "vlnité", "přirozeně mírně"]];
-  tiles.forEach(([l, v, d], i) => {
-    const x = 4.65 + (i % 2) * 2.45, y = 1.25 + Math.floor(i / 2) * 1.12;
-    card(s, x, y, 2.3, 0.98, "Vlastnost " + l);
-    txt(s, l, { x: x + 0.18, y: y + 0.1, w: 2.0, h: 0.2, fontSize: 9, bold: true, color: COL.rose, charSpacing: 2 });
-    txt(s, v, { x: x + 0.18, y: y + 0.3, w: 2.0, h: 0.38, fontSize: 20, bold: true, fontFace: HEAD, color: COL.wine });
-    txt(s, d, { x: x + 0.18, y: y + 0.68, w: 2.0, h: 0.22, fontSize: 11, color: COL.muted });
+  const lens = [["KRÁTKÉ", "ozdoby, vlny, čelenka"], ["POLODLOUHÉ", "malý drdol, polovyčesaný"],
+    ["DLOUHÉ", "drdoly, copy, vlny"]];
+  lens.forEach(([l, d], i) => {
+    const x = 4.65 + i * 1.62;
+    card(s, x, 1.25, 1.5, 1.0, "Delka " + l);
+    txt(s, l, { x: x + 0.12, y: 1.35, w: 1.3, h: 0.3, fontSize: 11, bold: true, color: COL.wine });
+    txt(s, d, { x: x + 0.12, y: 1.65, w: 1.3, h: 0.55, fontSize: 10, color: COL.muted });
   });
-  card(s, 4.65, 3.55, 4.75, 1.5, "Vhodnost", COL.petal);
-  txt(s, "Jsou vhodné pro můj návrh? Ano!", { x: 4.85, y: 3.65, w: 4.4, h: 0.3, fontSize: 14, bold: true, color: COL.wine });
-  txt(s, ticks(["délka stačí na drdol i copánek", "hustota dodá drdolu objem",
-    "vlnitost pomáhá držet tvar", "jsou těžké → použiji více vlásenek"]),
-  { x: 4.85, y: 3.98, w: 4.4, h: 1.0, fontSize: 12 });
-  s.addNotes("Vlasy jsou dlouhé, husté a mírně vlnité. To je pro drdol ideální – mám dost vlasů na objem " +
-    "i copánek. Jsou ale těžké, takže je musím pořádně upevnit vlásenkami.");
+  card(s, 4.65, 2.4, 4.75, 1.45, "Vlastnosti");
+  txt(s, labelRows([["Jemné", "potřebují objem – pěna, tupírování"], ["Husté", "drží objem, ale potřebují více vlásenek"],
+    ["Rovné", "nejdřív natočím kulmou"], ["Vlnité", "dobře drží tvar"]]),
+  { x: 4.83, y: 2.52, w: 4.45, h: 1.3, fontSize: 12, paraSpaceAfter: 5 });
+  card(s, 4.65, 4.0, 4.75, 1.05, "Vhodnost", COL.petal);
+  txt(s, [{ text: "Pro můj návrh: ", options: { bold: true, color: COL.wine } },
+    { text: "nejlepší jsou polodlouhé až dlouhé, středně husté až husté vlasy. Krátké vlasy na drdol nestačí." }],
+  { x: 4.83, y: 4.08, w: 4.45, h: 0.9, fontSize: 12, valign: "middle" });
+  s.addNotes("Účes vždy volím podle vlasů. Na krátké vlasy se hodí spíš ozdoby a vlny, na polodlouhé malý drdol " +
+    "nebo polovyčesaný účes a dlouhé vlasy umožní skoro všechno. Jemné vlasy potřebují objem, husté víc vlásenek, " +
+    "rovné vlasy musím natočit. Pro můj drdol jsou nejlepší polodlouhé až dlouhé vlasy.");
 
   // 4 ─ NÁVRH ÚČESU
   pres.addSection({ title: "Návrh a postup" });
@@ -265,7 +275,7 @@ async function icon(Comp, color = "#FFFFFF") {
   card(s, 0.5, 1.25, 5.6, 1.45, "Proc je vhodny", COL.petal);
   txt(s, "Proč je návrh vhodný", { x: 0.7, y: 1.35, w: 5.2, h: 0.3, fontSize: 14, bold: true, color: COL.wine });
   txt(s, ticks(["romantický a elegantní – sedí k nevěstě i šatům", "odhalí krk a záda šatů s knoflíčky",
-    "využije délku a hustotu vlasů zákaznice"]), { x: 0.7, y: 1.7, w: 5.2, h: 0.95, fontSize: 12 });
+    "hodí se na polodlouhé i dlouhé vlasy"]), { x: 0.7, y: 1.7, w: 5.2, h: 0.95, fontSize: 12 });
   const ev = [[ic.check, "Drží", "pevný culík jako základ, vlásenky křížem, lak"],
     [ic.heart, "Pohodlný", "nízký drdol netlačí, závoj jde sundat"],
     [ic.eye, "Upravený", "kontrola zrcadlem ze všech stran, svědkyně má vlásenky a lak"]];
